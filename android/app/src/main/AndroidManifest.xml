@@ -1,7 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.carpe_numerum">
    <application
-        android:label="carpe_numerum"
+        android:label="Carpe Numerum"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity

@@ -11,6 +11,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       theme: ThemeData(
+        fontFamily: 'Montserrat',
         primarySwatch: Colors.blue,
       ),
       home: const MyHomePage(),
@@ -36,6 +37,7 @@ class _MyHomePageState extends State<MyHomePage> {
     'VII',
     'VIII',
     'IX',
+    'X'
   ];
   String _chosenNumber = 'VIII';
   bool _gameStage2 = false;
@@ -48,6 +50,7 @@ class _MyHomePageState extends State<MyHomePage> {
           'carpe numerum'.toUpperCase(),
           style: const TextStyle(
             fontSize: 20,
+            fontWeight: FontWeight.bold,
           ),
         ),
         centerTitle: true,
@@ -68,10 +71,10 @@ class _MyHomePageState extends State<MyHomePage> {
               ),
               GridView.count(
                 scrollDirection: Axis.vertical,
-                crossAxisCount: 3,
-                padding: const EdgeInsets.fromLTRB(35, 20, 35, 20),
-                mainAxisSpacing: 40.0,
-                crossAxisSpacing: 40.0,
+                crossAxisCount: 5,
+                padding: const EdgeInsets.fromLTRB(35, 10, 35, 10),
+                mainAxisSpacing: 10.0,
+                crossAxisSpacing: 10.0,
                 shrinkWrap: true,
                 children: List.generate(_numbers.length, (index) {
                   return ElevatedButton(
@@ -79,7 +82,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     child: Text(
                       _numbers[index],
                       style: const TextStyle(
-                        fontSize: 20,
+                        fontSize: 12,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
@@ -132,7 +135,7 @@ class _MyHomePageState extends State<MyHomePage> {
                         'Yes',
                         style: TextStyle(
                           fontSize: 20,
-                          fontWeight: FontWeight.bold,
+                          fontWeight: FontWeight.normal,
                         ),
                       ),
                     ),
@@ -143,7 +146,7 @@ class _MyHomePageState extends State<MyHomePage> {
                         'No',
                         style: TextStyle(
                           fontSize: 20,
-                          fontWeight: FontWeight.bold,
+                          fontWeight: FontWeight.normal,
                         ),
                       ),
                     )
