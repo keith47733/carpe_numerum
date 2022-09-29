@@ -1,7 +1,21 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(
+    ChangeNotifierProvider(
+      create: (context) => ThemeMode(),
+      child: const MyApp(),
+    ),
+  );
+}
+
+class ThemeMode with ChangeNotifier {
+  bool _lightmode = false;
+  changeMode() {
+    _lightmode = !_lightmode;
+    notifyListeners();
+  }
 }
 
 class MyApp extends StatelessWidget {
@@ -9,10 +23,13 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final themeMode = Provider.of<ThemeMode>(context);
+
     return MaterialApp(
+			debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        fontFamily: 'Montserrat',
         primarySwatch: Colors.blue,
+        brightness: themeMode._lightmode ? Brightness.dark : Brightness.light,
       ),
       home: const MyHomePage(),
     );
@@ -27,23 +44,13 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  final List<String> _numbers = [
-    'I',
-    'II',
-    'III',
-    'IV',
-    'V',
-    'VI',
-    'VII',
-    'VIII',
-    'IX',
-    'X'
-  ];
+  final List<String> _numbers = ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX', 'X'];
   String _chosenNumber = 'VIII';
-  bool _gameStage2 = false;
+  bool _isAnswerPhase = false;
 
   @override
   Widget build(BuildContext context) {
+    final themeMode = Provider.of<ThemeMode>(context);
     return Scaffold(
       appBar: AppBar(
         title: Text(
@@ -53,9 +60,16 @@ class _MyHomePageState extends State<MyHomePage> {
             fontWeight: FontWeight.bold,
           ),
         ),
-        centerTitle: true,
+        centerTitle: false,
+        actions: [
+          Switch(
+            value: themeMode._lightmode,
+            onChanged: (bool val) {
+              themeMode.changeMode();
+            },
+          ),
+        ],
       ),
-      //
       body: Column(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: <Widget>[
@@ -76,23 +90,26 @@ class _MyHomePageState extends State<MyHomePage> {
                 mainAxisSpacing: 10.0,
                 crossAxisSpacing: 10.0,
                 shrinkWrap: true,
-                children: List.generate(_numbers.length, (index) {
-                  return ElevatedButton(
-                    onPressed: _gameStage2 ? null : () => _chooseNumber(index),
-                    child: Text(
-                      _numbers[index],
-                      style: const TextStyle(
-                        fontSize: 12,
-                        fontWeight: FontWeight.bold,
+                children: List.generate(
+                  _numbers.length,
+                  (index) {
+                    return ElevatedButton(
+                      onPressed: _isAnswerPhase ? null : () => _chooseNumber(index),
+                      child: Text(
+                        _numbers[index],
+                        style: const TextStyle(
+                          fontSize: 12,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
-                    ),
-                  );
-                }),
+                    );
+                  },
+                ),
               ),
             ],
           ),
           AnimatedOpacity(
-            opacity: _gameStage2 ? 1.0 : 0.0,
+            opacity: _isAnswerPhase ? 1.0 : 0.0,
             duration: const Duration(milliseconds: 500),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
@@ -163,13 +180,13 @@ class _MyHomePageState extends State<MyHomePage> {
   void _chooseNumber(index) {
     setState(() {
       _chosenNumber = _numbers[index];
-      _gameStage2 = true;
+      _isAnswerPhase = true;
     });
   }
 
   void _playAgain() {
     setState(() {
-      _gameStage2 = false;
+      _isAnswerPhase = false;
     });
   }
 }
